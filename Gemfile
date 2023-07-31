@@ -44,3 +44,6 @@ gem 'devise-jwt'
 gem 'rack-cors'
 
 gem 'jwt'
+
+gem 'sidekiq'
+
