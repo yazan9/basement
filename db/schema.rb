@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_31_055816) do
+ActiveRecord::Schema.define(version: 2023_07_31_062349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,17 @@ ActiveRecord::Schema.define(version: 2023_07_31_055816) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "schedules", force: :cascade do |t|
+    t.bigint "order_id"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer "status"
+    t.text "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_schedules_on_order_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -42,4 +53,5 @@ ActiveRecord::Schema.define(version: 2023_07_31_055816) do
   end
 
   add_foreign_key "orders", "users"
+  add_foreign_key "schedules", "orders"
 end
