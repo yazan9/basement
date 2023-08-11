@@ -11,7 +11,12 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def create
-    build_resource(sign_up_params)
+    build_resource(sign_up_params.except(:latitude, :longitude))
+
+    # Assign the location using PostGIS's ST_Point method
+    if sign_up_params[:latitude].present? && sign_up_params[:longitude].present?
+      resource.location = "POINT(#{sign_up_params[:longitude]} #{sign_up_params[:latitude]})"
+    end
 
     if resource.save
       # Generate a JWT token
@@ -51,7 +56,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
 
   # protected
   def sign_up_params
-    params.require(:user).permit(:email, :password, :name, :phone, :user_type)
+    params.require(:user).permit(:email, :password, :name, :phone, :user_type, :latitude, :longitude)
   end
 
   # If you have extra params to permit, append them to the sanitizer.

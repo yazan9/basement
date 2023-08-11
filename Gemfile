@@ -7,6 +7,9 @@ ruby '3.1.3'
 gem 'rails', '~> 6.1.7', '>= 6.1.7.4'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
+# For PostGIS support
+gem 'activerecord-postgis-adapter'
+
 # Use Puma as the app server
 gem 'puma', '~> 5.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -41,7 +44,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise'
 gem 'devise-jwt'
-gem 'rack-cors'
 
 gem 'jwt'
 
