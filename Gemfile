@@ -44,8 +44,11 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise'
 gem 'devise-jwt'
-
 gem 'jwt'
-
 gem 'sidekiq'
+gem 'pagy'
+gem 'blueprinter'
+gem 'oj'
+
+
 

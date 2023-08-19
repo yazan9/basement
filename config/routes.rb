@@ -16,6 +16,7 @@ Rails.application.routes.draw do
                  }
 
       resources :orders
+      get 'search/', to: 'search#index'
     end
   end
 end

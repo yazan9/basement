@@ -8,4 +8,5 @@ class User < ApplicationRecord
     client: 0,
     provider: 1
   }
+
 end
