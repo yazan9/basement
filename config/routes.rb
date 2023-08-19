@@ -14,7 +14,9 @@ Rails.application.routes.draw do
                    sign_out: 'users/sign_out',
                    registration: 'users'
                  }
-
+      resources :users do
+        resources :reviews, only: [:index, :create, :edit, :update, :destroy]
+      end
       resources :orders
       get 'search/', to: 'search#index'
     end

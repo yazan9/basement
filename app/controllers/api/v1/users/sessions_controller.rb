@@ -2,6 +2,7 @@
 
 class Api::V1::Users::SessionsController < Devise::SessionsController
   include JwtAuthentication
+  skip_before_action :authenticate_from_token!, only: [:create]
 
   respond_to :json
 

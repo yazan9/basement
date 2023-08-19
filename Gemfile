@@ -49,6 +49,7 @@ gem 'sidekiq'
 gem 'pagy'
 gem 'blueprinter'
 gem 'oj'
+gem 'faker'
 
 
 

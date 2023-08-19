@@ -57,6 +57,20 @@ def seed_100_providers
   puts "Seeded 100 users of type: provider !"
 end
 
-seed_100_providers
+def add_5_reviews_for_each_provider
+  providers = User.where(user_type: 'provider')
+  clients = User.where(user_type: 'client')
+  providers.each do |provider|
+    5.times do |i|
+      rating = rand(1..5)
+      content = Faker::Lorem.sentence(word_count: 100)
+      client = clients.sample
+      Review.create!(user_id: client.id, rating: rating, content: content, reviewee_id: provider.id)
+    end
+  end
+end
+
+#seed_100_providers
+add_5_reviews_for_each_provider
 
 
