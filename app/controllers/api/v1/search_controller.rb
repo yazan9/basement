@@ -1,5 +1,6 @@
 class Api::V1::SearchController < ApplicationController
   include PaginationConcern
+  skip_before_action :authenticate_from_token!, only: [:index, :show]
   def index
     # Ensure required parameters are present
     if params[:latitude].present? && params[:longitude].present? && params[:radius].present?
@@ -21,5 +22,4 @@ class Api::V1::SearchController < ApplicationController
       render json: { error: 'Missing required parameters' }, status: :bad_request
     end
   end
-
 end

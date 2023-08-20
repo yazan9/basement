@@ -12,6 +12,14 @@ class User < ApplicationRecord
     provider: 1
   }
 
+  def average_rating
+    reviews_received.average(:rating).to_f.round(2)
+  end
+
+  def ratings_count
+    reviews_received.count
+  end
+
   def self.authenticate_from_jwt_token!(jwt_token)
     user = User.find_by(id: User.decode_jwt_token(jwt_token)[0]['user_id'])
 

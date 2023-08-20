@@ -2,7 +2,7 @@
 
 class UserBlueprint < Blueprinter::Base
   identifier :id
-  fields :name
+  fields :name, :average_rating, :ratings_count
   field :distance_from_origin, name: :distance
 end
 
