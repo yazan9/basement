@@ -10,11 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_19_153440) do
+ActiveRecord::Schema.define(version: 2023_08_20_221804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "bookings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "provider_id", null: false
+    t.integer "frequency", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "start_at", null: false
+    t.decimal "rate", precision: 5, scale: 2, default: "0.0", null: false
+    t.text "comments"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["provider_id"], name: "index_bookings_on_provider_id"
+    t.index ["user_id"], name: "index_bookings_on_user_id"
+  end
 
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id"
@@ -67,6 +81,8 @@ ActiveRecord::Schema.define(version: 2023_08_19_153440) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "bookings", "users"
+  add_foreign_key "bookings", "users", column: "provider_id"
   add_foreign_key "orders", "users"
   add_foreign_key "reviews", "users"
   add_foreign_key "reviews", "users", column: "reviewee_id"
