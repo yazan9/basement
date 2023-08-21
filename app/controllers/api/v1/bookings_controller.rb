@@ -35,8 +35,17 @@ class Api::V1::BookingsController < ApplicationController
 
   # DELETE /bookings/1
   def destroy
-    @booking.destroy
-    render status: :ok
+    if @api_user.user_type == :client
+      @booking.status = :cancelled_by_client
+    else
+      @booking.status = :cancelled_by_provider
+    end
+
+    if @booking.save
+      render json: @booking, status: :ok
+    else
+      render json: { error: @booking.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   private
@@ -47,7 +56,9 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def set_bookings
-    @bookings = Booking.where(user_id: @api_user.id)
+    @bookings = Booking.where(user_id: @api_user.id, status: [:pending, :active]).includes(:provider).map do |booking|
+      booking.as_json(include: { provider: { only: [:id, :name] } }) # Include desired provider attributes
+    end
   end
 
   # Only allow a list of trusted parameters through.

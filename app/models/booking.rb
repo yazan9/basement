@@ -7,15 +7,17 @@ class Booking < ApplicationRecord
   validates :status, presence: true
 
   enum frequency: {
-    one_time: 0,
-    twice_a_week: 1,
-    weekly: 2,
-    every_two_weeks: 3,
+    once: 0,
+    once_a_week: 1,
+    twice_a_week: 2,
+    once_every_two_weeks: 3,
   }
 
   enum status: {
     inactive: 0,
     pending: 1,
-    active: 2
+    active: 2,
+    cancelled_by_client: 3,
+    cancelled_by_provider: 4,
   }
 end
