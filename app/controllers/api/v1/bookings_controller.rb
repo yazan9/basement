@@ -56,6 +56,22 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def set_bookings
+    if @api_user.user_type == 'provider'
+      set_bookings_for_provider
+    else
+      set_bookings_for_client
+    end
+  end
+
+  def set_bookings_for_provider
+    @bookings = Booking.where(provider_id: @api_user.id, status: [:pending, :active]).includes(:provider).map do |booking|
+      booking_json = booking.as_json(include: { user: { only: [:id, :name] } })
+      booking_json["client"] = booking_json.delete("user")
+      booking_json
+    end
+  end
+
+  def set_bookings_for_client
     @bookings = Booking.where(user_id: @api_user.id, status: [:pending, :active]).includes(:provider).map do |booking|
       booking.as_json(include: { provider: { only: [:id, :name] } }) # Include desired provider attributes
     end
@@ -63,6 +79,6 @@ class Api::V1::BookingsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def booking_params
-    params.require(:booking).permit(:provider_id, :start_at, :frequency, :rate, :comments).merge(user_id: @api_user.id)
+    params.require(:booking).permit(:provider_id, :start_at, :frequency, :rate, :comments, :offset).merge(user_id: @api_user.id)
   end
 end

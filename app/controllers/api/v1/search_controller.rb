@@ -8,6 +8,7 @@ class Api::V1::SearchController < ApplicationController
       lon = params[:longitude].to_f
       radius_in_km = params[:radius].to_f
       radius_in_meters = radius_in_km * 1000  # Convert km to meters
+      query = params[:query]
 
       # Fetch users of type 1 within the specified radius
       # Caution: SQL injection vulnerability - minimized by to_f conversion above
@@ -15,6 +16,12 @@ class Api::V1::SearchController < ApplicationController
                         .where(user_type: :provider)
                         .where("ST_DWithin(location, ST_MakePoint(?, ?)::geography, ?)", lon, lat, radius_in_meters)
                         .order("distance_from_origin ASC")
+
+      # If a query parameter is provided, filter by name and description
+      if query.present?
+        #users_scope = users_scope.where("name ILIKE ? OR description ILIKE ?", "%#{query}%", "%#{query}%")
+        users_scope = users_scope.where("name ILIKE ?", "%#{query}%")
+      end
 
       # Render paginated users
       render json: { users: UserBlueprint.render_as_hash(paginate(users_scope)), meta: pagination_status }, status: :ok

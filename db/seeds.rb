@@ -71,6 +71,6 @@ def add_5_reviews_for_each_provider
 end
 
 #seed_100_providers
-add_5_reviews_for_each_provider
+#add_5_reviews_for_each_provider
 
 
