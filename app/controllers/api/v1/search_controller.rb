@@ -24,7 +24,7 @@ class Api::V1::SearchController < ApplicationController
       end
 
       # Render paginated users
-      render json: { users: UserBlueprint.render_as_hash(paginate(users_scope)), meta: pagination_status }, status: :ok
+      render json: { users: UserBlueprint.render_as_hash(paginate(users_scope), view: :extended), meta: pagination_status }, status: :ok
     else
       render json: { error: 'Missing required parameters' }, status: :bad_request
     end

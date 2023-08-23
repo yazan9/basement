@@ -16,6 +16,9 @@ Rails.application.routes.draw do
                  }
       resources :users do
         resources :reviews, only: [:index, :create, :edit, :update, :destroy]
+        member do
+          put :profile_image
+        end
       end
       resources :bookings, only: [:index, :show, :create, :update, :destroy] do
         member do

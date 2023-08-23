@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  has_one_attached :profile_image
+
   has_many :reviews_given, class_name: 'Review', foreign_key: 'user_id'
   has_many :reviews_received, class_name: 'Review', foreign_key: 'reviewee_id'
 
@@ -18,6 +20,15 @@ class User < ApplicationRecord
 
   def ratings_count
     reviews_received.count
+  end
+
+  def profile_image_url
+    if profile_image.attached?
+      public_bucket = ENV.fetch('AWS_BUCKET_PIXIES_NAME_PUBLIC', 'pixies-public')
+      "https://#{public_bucket}.s3.amazonaws.com/#{profile_image.blob.key}"
+    else
+      ''
+    end
   end
 
   def self.authenticate_from_jwt_token!(jwt_token)

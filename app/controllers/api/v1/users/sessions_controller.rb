@@ -13,7 +13,7 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
       sign_in(user)
       # Generate a JWT token
       jwt_token = generate_jwt_token(user)
-      render json: { message: 'Signed in successfully.', user: user, jwt_token: jwt_token }, status: :ok
+      render json: { message: 'Signed in successfully.', user: UserBlueprint.render_as_hash(user, view: :restricted), jwt_token: jwt_token }, status: :ok
     else
       render json: { message: 'Invalid email or password.' }, status: :unauthorized
     end
