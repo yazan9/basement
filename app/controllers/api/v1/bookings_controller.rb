@@ -1,5 +1,5 @@
 class Api::V1::BookingsController < ApplicationController
-  before_action :set_booking, only: [:show, :update, :destroy]
+  before_action :set_booking, only: [:show, :update, :destroy, :accept]
   before_action :set_bookings, only: [:index]
 
   # GET /bookings
@@ -48,10 +48,32 @@ class Api::V1::BookingsController < ApplicationController
     end
   end
 
+  def accept
+    @booking.status = :active
+
+    if @booking.save
+      render json: @booking, status: :ok
+    else
+      render json: { error: @booking.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_booking
+    if @api_user.user_type == 'provider'
+      set_booking_for_provider
+    else
+      set_booking_for_client
+    end
+  end
+
+  def set_booking_for_provider
+    @booking = Booking.find_by(id: params[:id], provider_id: @api_user.id)
+  end
+
+  def set_booking_for_client
     @booking = Booking.find_by(id: params[:id], user_id: @api_user.id)
   end
 

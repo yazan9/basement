@@ -18,6 +18,6 @@ class Booking < ApplicationRecord
     pending: 1,
     active: 2,
     cancelled_by_client: 3,
-    cancelled_by_provider: 4,
+    cancelled_by_provider: 4
   }
 end

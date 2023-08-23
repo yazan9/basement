@@ -17,7 +17,11 @@ Rails.application.routes.draw do
       resources :users do
         resources :reviews, only: [:index, :create, :edit, :update, :destroy]
       end
-      resources :bookings, only: [:index, :show, :create, :update, :destroy]
+      resources :bookings, only: [:index, :show, :create, :update, :destroy] do
+        member do
+          put :accept
+        end
+      end
       get 'search/', to: 'search#index'
     end
   end
