@@ -2,6 +2,14 @@ class Api::V1::UsersController < ApplicationController
 
   before_action :set_user
 
+  def update
+    if @user.update(profile_update_params)
+      render json: UserBlueprint.render_as_hash(@user, view: :restricted), status: :ok
+    else
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def profile_image
     # Extract the content type and base64 encoded string from the data URL
     content_type, encoded_img = params[:image].match(/\Adata:(.*?);base64,(.*)\z/).captures
@@ -48,5 +56,9 @@ class Api::V1::UsersController < ApplicationController
 
   def set_user
     @user = @api_user
+  end
+
+  def profile_update_params
+    params.require(:user).permit(:name, :phone, :email, :password)
   end
 end

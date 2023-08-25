@@ -11,6 +11,10 @@ class UserBlueprint < Blueprinter::Base
     fields :name, :average_rating, :ratings_count, :profile_image_url
     field :distance_from_origin, name: :distance
   end
+
+  view :in_messages do
+    fields :id, :name, :profile_image_url
+  end
 end
 
 

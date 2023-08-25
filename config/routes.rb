@@ -20,11 +20,17 @@ Rails.application.routes.draw do
           put :profile_image
         end
       end
+
       resources :bookings, only: [:index, :show, :create, :update, :destroy] do
         member do
           put :accept
         end
       end
+
+      resources :conversations, only: [:index, :create, :destroy] do
+        resources :messages, only: [:index, :create, :destroy, :update]
+      end
+
       get 'search/', to: 'search#index'
     end
   end
