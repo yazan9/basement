@@ -9,10 +9,18 @@ class User < ApplicationRecord
   has_many :reviews_given, class_name: 'Review', foreign_key: 'user_id'
   has_many :reviews_received, class_name: 'Review', foreign_key: 'reviewee_id'
 
+  validate :password_complexity
+
   enum user_type: {
     client: 0,
     provider: 1
   }
+
+  def password_complexity
+    if password.present? and not password.match(/\A(?=.*[0-9]).{6,}\z/)
+      errors.add :password, 'must include at least one number and have at least 6 characters'
+    end
+  end
 
   def average_rating
     reviews_received.average(:rating).to_f.round(2)

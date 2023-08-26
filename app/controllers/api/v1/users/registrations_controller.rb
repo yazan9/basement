@@ -14,9 +14,16 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params.except(:latitude, :longitude))
 
-    # Assign the location using PostGIS's ST_Point method
-    if sign_up_params[:latitude].present? && sign_up_params[:longitude].present?
-      resource.location = "POINT(#{sign_up_params[:longitude]} #{sign_up_params[:latitude]})"
+    # Geocoding to find latitude and longitude from postal code
+    if sign_up_params[:address].present?
+      coordinates = Geocoder.coordinates(sign_up_params[:address])
+      if coordinates.present?
+        latitude, longitude = coordinates
+        # Using PostGIS's ST_Point method to store lat, long
+        resource.location = "POINT(#{longitude} #{latitude})"
+      else
+        render json: { message: 'Invalid address' }, status: :unprocessable_entity and return
+      end
     end
 
     if resource.save
@@ -24,7 +31,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
       jwt_token = generate_jwt_token(resource)
 
       # Return the JWT token in the response
-      render json: { message: 'User created successfully.', jwt_token: jwt_token }, status: :created
+      render json: { message: 'User created successfully.', user: UserBlueprint.render_as_hash(resource, view: :restricted), jwt_token: jwt_token }, status: :created
     else
       # Handle failed registration
       render json: { message: 'Failed to create user.', errors: resource.errors.full_messages }, status: :unprocessable_entity
@@ -57,7 +64,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
 
   # protected
   def sign_up_params
-    params.require(:user).permit(:email, :password, :name, :phone, :user_type, :latitude, :longitude)
+    params.require(:user).permit(:email, :password, :name, :phone, :user_type, :latitude, :longitude, :address)
   end
 
   # If you have extra params to permit, append them to the sanitizer.
