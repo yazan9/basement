@@ -244,6 +244,7 @@ DEPENDENCIES
   geocoder
   jwt
   listen (~> 3.3)
+  mail
   mini_magick
   oj
   pagy

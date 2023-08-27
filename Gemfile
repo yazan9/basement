@@ -53,6 +53,8 @@ gem 'faker'
 gem 'aws-sdk-s3', require: false
 gem 'mini_magick'
 gem 'geocoder'
+gem 'mail'
+
 
 
 
