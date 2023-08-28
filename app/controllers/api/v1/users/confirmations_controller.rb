@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Users::ConfirmationsController < Devise::ConfirmationsController
-  skip_before_action :authenticate_from_token!, only: [:show]
+  skip_before_action :authenticate_from_token!, only: [:show, :create]
 
   # GET /resource/confirmation/new
   # def new
@@ -9,9 +9,23 @@ class Api::V1::Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # POST /resource/confirmation
-  # def create
-  #   super
-  # end
+  def create
+    self.resource = User.find_by(email: params[:email])
+
+    if resource.nil?
+      render json: { message: 'Failed to send confirmation email.', code: 0 }, status: :unprocessable_entity and return
+    end
+
+    yield resource if block_given?
+
+    resource.send_confirmation_instructions
+
+    if successfully_sent?(resource)
+      render json: { message: 'Confirmation email sent successfully.', code: 1 }, status: :ok
+    else
+      render json: { message: 'Failed to send confirmation email.', code: 2 }, status: :unprocessable_entity
+    end
+  end
 
   # GET /resource/confirmation?confirmation_token=abcdef
   def show

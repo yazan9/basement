@@ -11,14 +11,14 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
     user = User.find_by(email: params[:user][:email])
     if user&.valid_password?(params[:user][:password])
       if user.confirmed_at.nil?
-        render json: { message: 'Please confirm your email address.' }, status: :unauthorized and return
+        render json: { message: 'Please confirm your email address.', code: 0 }, status: :unauthorized and return
       end
       sign_in(user)
       # Generate a JWT token
       jwt_token = generate_jwt_token(user)
       render json: { message: 'Signed in successfully.', user: UserBlueprint.render_as_hash(user, view: :restricted), jwt_token: jwt_token }, status: :ok
     else
-      render json: { message: 'Invalid email or password.' }, status: :unauthorized
+      render json: { message: 'Invalid email or password.', code: 1 }, status: :unauthorized
     end
   end
 

@@ -12,7 +12,12 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def create
+    #TODO: Move to a background job since this is taking a long time to reverse geocode and send confirmation email
+    start_time = Time.now
+
     build_resource(sign_up_params.except(:latitude, :longitude))
+    puts "Time taken to build resource: #{Time.now - start_time}s"
+    segment_start_time = Time.now
 
     # Geocoding to find latitude and longitude from postal code
     if sign_up_params[:address].present?
@@ -26,12 +31,21 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
       end
     end
 
+    # Log time taken for setting coordinates and checking validity
+    puts "Time taken for setting coordinates and checking validity: #{Time.now - segment_start_time}s"
+
+    segment_start_time = Time.now
     if resource.save
       render json: { message: 'User created successfully, Please confirm your email address.' }, status: :created
     else
       # Handle failed registration
       render json: { message: 'Failed to create user.', errors: resource.errors.full_messages }, status: :unprocessable_entity
     end
+    # Log time taken for resource.save and rendering
+    puts "Time taken for resource.save and rendering: #{Time.now - segment_start_time}s"
+
+    # Log total time taken for the entire action
+    puts "Total time taken: #{Time.now - start_time}s"
   end
 
   # GET /resource/edit
