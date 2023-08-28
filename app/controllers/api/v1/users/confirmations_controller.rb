@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class Api::V1::Users::Sessions::ConfirmationsController < Devise::ConfirmationsController
+class Api::V1::Users::ConfirmationsController < Devise::ConfirmationsController
+  skip_before_action :authenticate_from_token!, only: [:show]
+
   # GET /resource/confirmation/new
   # def new
   #   super
@@ -12,9 +14,16 @@ class Api::V1::Users::Sessions::ConfirmationsController < Devise::ConfirmationsC
   # end
 
   # GET /resource/confirmation?confirmation_token=abcdef
-  # def show
-  #   super
-  # end
+  def show
+    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+    yield resource if block_given?
+
+    if resource.errors.empty?
+      render json: { message: 'Email confirmed successfully.' }, status: :ok
+    else
+      render json: { message: 'Invalid confirmation token.' }, status: :unauthorized
+    end
+  end
 
   # protected
 

@@ -27,11 +27,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
     end
 
     if resource.save
-      # Generate a JWT token
-      jwt_token = generate_jwt_token(resource)
-
-      # Return the JWT token in the response
-      render json: { message: 'User created successfully.', user: UserBlueprint.render_as_hash(resource, view: :restricted), jwt_token: jwt_token }, status: :created
+      render json: { message: 'User created successfully, Please confirm your email address.' }, status: :created
     else
       # Handle failed registration
       render json: { message: 'Failed to create user.', errors: resource.errors.full_messages }, status: :unprocessable_entity

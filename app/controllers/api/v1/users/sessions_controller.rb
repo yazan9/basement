@@ -10,6 +10,9 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
   def create
     user = User.find_by(email: params[:user][:email])
     if user&.valid_password?(params[:user][:password])
+      if user.confirmed_at.nil?
+        render json: { message: 'Please confirm your email address.' }, status: :unauthorized and return
+      end
       sign_in(user)
       # Generate a JWT token
       jwt_token = generate_jwt_token(user)

@@ -6,13 +6,15 @@ Rails.application.routes.draw do
       devise_for :users,
                  controllers: {
                    sessions: 'api/v1/users/sessions',
-                   registrations: 'api/v1/users/registrations'
+                   registrations: 'api/v1/users/registrations',
+                   confirmations: 'api/v1/users/confirmations',
                  },
                  path: '',
                  path_names: {
                    sign_in: 'users/sign_in',
                    sign_out: 'users/sign_out',
-                   registration: 'users'
+                   registration: 'users',
+                   confirmations: 'users/confirmations',
                  }
       resources :users do
         resources :reviews, only: [:index, :create, :edit, :update, :destroy]
