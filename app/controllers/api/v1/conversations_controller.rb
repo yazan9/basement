@@ -1,5 +1,5 @@
 class Api::V1::ConversationsController < ApplicationController
-  before_action :set_conversations, only: [:index]
+  before_action :set_conversations, only: [:index, :unread_messages_count]
   before_action :set_conversation, only: [:destroy]
 
   include PaginationConcern
@@ -31,6 +31,15 @@ class Api::V1::ConversationsController < ApplicationController
     else
       render json: { error: @conversation.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def unread_messages_count
+    total_unread_count = Message.where(conversation_id: @conversations.map(&:id))
+                                .where(read: false)
+                                .where.not(user_id: @api_user.id)
+                                .count
+
+    render json: { unread_messages_count: total_unread_count }, status: :ok
   end
 
   private

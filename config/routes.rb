@@ -33,6 +33,9 @@ Rails.application.routes.draw do
 
       resources :conversations, only: [:index, :create, :destroy] do
         resources :messages, only: [:index, :create, :destroy, :update]
+        collection do
+          get :unread_messages_count
+        end
       end
 
       get 'search/', to: 'search#index'

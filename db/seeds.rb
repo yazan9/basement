@@ -70,7 +70,15 @@ def add_5_reviews_for_each_provider
   end
 end
 
+def confirm_all_users
+  User.all.each do |user|
+    user.confirmed_at = Time.now
+    user.save!
+  end
+end
+
 #seed_100_providers
 #add_5_reviews_for_each_provider
+confirm_all_users
 
 
