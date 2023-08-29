@@ -1,0 +1,16 @@
+2023-08-29T21:05:32.073Z pid=26852 tid=k4o INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:23:15.695Z pid=28321 tid=jot INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:24:19.539Z pid=28422 tid=jd6 INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:25:07.992Z pid=28503 tid=jff INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:27:00.360Z pid=28663 tid=jjv INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:27:54.615Z pid=28743 tid=oqz INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:58:32.548Z pid=31061 tid=mzd INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:58:48.812Z pid=31098 tid=n06 INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:59:02.525Z pid=31163 tid=n1z INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T21:59:21.765Z pid=31215 tid=n37 INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T22:03:11.063Z pid=31553 tid=nd9 INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T22:04:41.115Z pid=31703 tid=nh7 INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T22:05:07.023Z pid=31781 tid=mcp INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T22:05:32.144Z pid=31827 tid=me7 INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T22:05:54.157Z pid=31868 tid=meo INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+2023-08-29T22:09:53.369Z pid=32187 tid=m9j INFO: Sidekiq 7.1.2 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
