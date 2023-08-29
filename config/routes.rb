@@ -8,6 +8,7 @@ Rails.application.routes.draw do
                    sessions: 'api/v1/users/sessions',
                    registrations: 'api/v1/users/registrations',
                    confirmations: 'api/v1/users/confirmations',
+                   passwords: 'api/v1/users/passwords',
                  },
                  path: '',
                  path_names: {
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
                    sign_out: 'users/sign_out',
                    registration: 'users',
                    confirmations: 'users/confirmations',
+                   passwords: 'users/passwords',
                  }
       resources :users do
         resources :reviews, only: [:index, :create, :edit, :update, :destroy]
