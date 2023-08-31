@@ -2,6 +2,7 @@ class Api::V1::SearchController < ApplicationController
   include PaginationConcern
   skip_before_action :authenticate_from_token!, only: [:index, :show]
   def index
+    #render json: debug and return
     # Ensure required parameters are present
     if params[:latitude].present? && params[:longitude].present? && params[:radius].present?
       lat = params[:latitude].to_f
@@ -23,10 +24,20 @@ class Api::V1::SearchController < ApplicationController
         users_scope = users_scope.where("name ILIKE ?", "%#{query}%")
       end
 
+      #filter by availablity
+
+
       # Render paginated users
       render json: { users: UserBlueprint.render_as_hash(paginate(users_scope), view: :extended), meta: pagination_status }, status: :ok
     else
       render json: { error: 'Missing required parameters' }, status: :bad_request
     end
+  end
+
+  def debug
+    booking = Booking.find(8)
+    days_from_now = 4
+    next_booking_slot_service = NextBookingSlotService.new(booking, days_from_now)
+    next_booking_slot_service.call
   end
 end

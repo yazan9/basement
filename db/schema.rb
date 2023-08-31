@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_29_194726) do
+ActiveRecord::Schema.define(version: 2023_08_31_175718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,19 @@ ActiveRecord::Schema.define(version: 2023_08_29_194726) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "booking_slots", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["booking_id"], name: "index_booking_slots_on_booking_id"
+    t.index ["end_at"], name: "index_booking_slots_on_end_at"
+    t.index ["start_at"], name: "index_booking_slots_on_start_at"
+    t.index ["user_id"], name: "index_booking_slots_on_user_id"
+  end
+
   create_table "bookings", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "provider_id", null: false
@@ -55,6 +68,7 @@ ActiveRecord::Schema.define(version: 2023_08_29_194726) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "offset", default: 0
+    t.integer "hours", default: 0
     t.index ["provider_id"], name: "index_bookings_on_provider_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
@@ -150,6 +164,8 @@ ActiveRecord::Schema.define(version: 2023_08_29_194726) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "booking_slots", "bookings"
+  add_foreign_key "booking_slots", "users"
   add_foreign_key "bookings", "users"
   add_foreign_key "bookings", "users", column: "provider_id"
   add_foreign_key "messages", "conversations"

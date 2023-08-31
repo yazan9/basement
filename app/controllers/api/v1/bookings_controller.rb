@@ -101,6 +101,6 @@ class Api::V1::BookingsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def booking_params
-    params.require(:booking).permit(:provider_id, :start_at, :frequency, :rate, :comments, :offset).merge(user_id: @api_user.id)
+    params.require(:booking).permit(:provider_id, :start_at, :frequency, :rate, :comments, :offset, :hours).merge(user_id: @api_user.id)
   end
 end
