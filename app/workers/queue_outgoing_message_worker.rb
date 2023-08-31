@@ -7,16 +7,14 @@ class QueueOutgoingMessageWorker
     puts "QueueOutgoingMessageWorker: perform"
     # Queue reminders 3 days before start_date
     # TODO: DO NOT FORGET TO CHANGE THE CONDITION TO 3 DAYS
-    #Booking.where(start_date: 3.days.from_now.to_date).each do |booking|
-    Booking.where("id > 10").each do |booking|
+    Booking.where(start_date: 3.days.from_now.to_date).each do |booking|
       message_params = booking_params(booking)
       queue_message(booking.user.email, :three_day_reminder, message_params)
       queue_message(booking.provider.email, :three_day_reminder, message_params)
     end
 
     # Queue reminders 1 day before start_date
-    #Booking.where(start_date: 1.day.from_now.to_date).each do |booking|
-    Booking.where("id < 3").each do |booking|
+    Booking.where(start_date: 1.day.from_now.to_date).each do |booking|
       message_params = booking_params(booking)
       queue_message(booking.user.email, :one_day_reminder, message_params)
       queue_message(booking.provider.email, :one_day_reminder, message_params)

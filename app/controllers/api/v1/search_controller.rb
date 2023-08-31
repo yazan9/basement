@@ -25,7 +25,22 @@ class Api::V1::SearchController < ApplicationController
       end
 
       #filter by availablity
+      hours = params[:hours].present? ? params[:hours].to_i : 0
+      start_at = params[:start_at].present? ? DateTime.parse(params[:start_at]) : nil
+      frequency = params[:frequency]
 
+      if start_at.present? && end_at.present?
+        end_at = start_at + hours.hours
+        users_scope = users_scope.joins("LEFT OUTER JOIN booking_slots ON users.id = booking_slots.user_id")
+                                 .where.not(
+          "(booking_slots.start_at >= ? AND booking_slots.start_at <= ?) OR " \
+          "(booking_slots.end_at >= ? AND booking_slots.end_at <= ?) OR " \
+          "(booking_slots.start_at <= ? AND booking_slots.end_at >= ?)",
+          start_at, end_at,
+          start_at, end_at,
+          start_at, end_at
+        ).distinct
+      end
 
       # Render paginated users
       render json: { users: UserBlueprint.render_as_hash(paginate(users_scope), view: :extended), meta: pagination_status }, status: :ok

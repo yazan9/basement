@@ -8,7 +8,7 @@ class Booking < ApplicationRecord
   validates :frequency, presence: true
   validates :status, presence: true
 
-  after_save :update_booking_slots
+  after_save :queue_update_booking_slots
 
   enum frequency: {
     once: 0,
@@ -25,25 +25,7 @@ class Booking < ApplicationRecord
     cancelled_by_provider: 4
   }
 
-  def update_booking_slots
-    # Delete existing booking slots for this booking
-    booking_slots.destroy_all
-
-    if self.status != 'active'
-      return
-    end
-
-    days_from_now = 30
-    next_booking_slot_service = NextBookingSlotService.new(self, days_from_now)
-    occurrences = next_booking_slot_service.call
-    occurrences.each do |occurrence|
-      booking_slot = BookingSlot.new(
-        booking: self,
-        user: self.user,
-        start_at: occurrence,
-        end_at: occurrence + self.hours.hours
-      )
-      booking_slot.save!
-    end
+  def queue_update_booking_slots
+    UpdateBookingSlotsWorker.perform_async(self.id)
   end
 end
