@@ -10,6 +10,11 @@ class Booking < ApplicationRecord
 
   after_commit :queue_update_booking_slots
 
+  after_commit -> { BookingMailerWorker.perform_async(self.id, 'new_booking') }, on: :create
+  after_commit -> { BookingMailerWorker.perform_async(self.id, 'booking_update') }, on: :update
+  after_commit -> { BookingMailerWorker.perform_async(self.id, 'booking_cancellation') }, on: :destroy
+
+
   enum frequency: {
     once: 0,
     once_a_week: 1,
