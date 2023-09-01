@@ -35,7 +35,7 @@ class Api::V1::BookingsController < ApplicationController
 
   # DELETE /bookings/1
   def destroy
-    if @api_user.user_type == :client
+    if @api_user.user_type == "client"
       @booking.status = :cancelled_by_client
     else
       @booking.status = :cancelled_by_provider
@@ -51,7 +51,7 @@ class Api::V1::BookingsController < ApplicationController
   def accept
     @booking.status = :active
 
-    if @booking.save
+    if @booking.save!
       render json: @booking, status: :ok
     else
       render json: { error: @booking.errors.full_messages }, status: :unprocessable_entity

@@ -7,10 +7,9 @@ class NextBookingSlotService
   def call
     occurrences = []
 
-    #TODO: REMOVE THIS
-    # if @booking.status != 'active'
-    #   return occurrences
-    # end
+    if @booking.status != 'active'
+      return occurrences
+    end
 
     case @booking.frequency
     when 'once'

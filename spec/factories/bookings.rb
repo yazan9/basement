@@ -8,6 +8,10 @@ FactoryBot.define do
     hours { 2 }
     offset { 3 }
 
+    trait :pending do
+      status { :pending }
+    end
+
     trait :once do
       frequency { :once }
     end

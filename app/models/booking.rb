@@ -8,7 +8,7 @@ class Booking < ApplicationRecord
   validates :frequency, presence: true
   validates :status, presence: true
 
-  after_save :queue_update_booking_slots
+  after_commit :queue_update_booking_slots
 
   enum frequency: {
     once: 0,

@@ -56,20 +56,6 @@ RSpec.describe Api::V1::SearchController, type: :controller do
         expect(ids).to include(user1.id)
         expect(ids).not_to include(user2.id, user3.id)
       end
-
-      # it 'filters users by availability' do
-      #   # Create booking slots for user1 and user2 that should filter them out based on your criteria
-      #   get :index, params: { latitude: '0.0', longitude: '0.0', radius: '10', start_at: '...', hours: '...' }
-      #   expect(response).to have_http_status(:ok)
-      #   # Add assertions to check if only user3 is in the result
-      # end
-
-      # it 'combines multiple filters' do
-      #   # Test a combination of radius, query, and availability filters
-      #   get :index, params: { latitude: '0.0', longitude: '0.0', radius: '10', query: '...', start_at: '...', hours: '...' }
-      #   expect(response).to have_http_status(:ok)
-      #   # Add assertions to check if the result matches the combined filters
-      # end
     end
 
     context 'when bookings for a user are present of type only_once' do
