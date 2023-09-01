@@ -8,6 +8,8 @@ class User < ApplicationRecord
 
   has_many :reviews_given, class_name: 'Review', foreign_key: 'user_id'
   has_many :reviews_received, class_name: 'Review', foreign_key: 'reviewee_id'
+  has_many :bookings, dependent: :destroy
+  has_many :booking_slots, dependent: :destroy
 
   validate :password_complexity
 

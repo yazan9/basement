@@ -29,13 +29,22 @@ class Api::V1::SearchController < ApplicationController
       start_at = params[:start_at].present? ? DateTime.parse(params[:start_at]) : nil
       frequency = params[:frequency]
 
-      if start_at.present? && end_at.present?
+      if start_at.present?
         end_at = start_at + hours.hours
-        users_scope = users_scope.joins("LEFT OUTER JOIN booking_slots ON users.id = booking_slots.user_id")
-                                 .where.not(
-          "(booking_slots.start_at >= ? AND booking_slots.start_at <= ?) OR " \
-          "(booking_slots.end_at >= ? AND booking_slots.end_at <= ?) OR " \
-          "(booking_slots.start_at <= ? AND booking_slots.end_at >= ?)",
+
+        users_scope = users_scope.left_outer_joins(:booking_slots)
+
+        # SQL condition to find overlapping bookings
+        condition_overlap = "((booking_slots.start_at >= ? AND booking_slots.start_at < ?) OR " \
+                    "(booking_slots.end_at > ? AND booking_slots.end_at <= ?) OR " \
+                    "(booking_slots.start_at <= ? AND booking_slots.end_at >= ?))"
+
+        # Apply the condition and filter
+        users_scope = users_scope.where(
+          "booking_slots.id IS NULL OR NOT EXISTS (" \
+          "SELECT 1 FROM booking_slots " \
+          "WHERE booking_slots.user_id = users.id AND #{condition_overlap}" \
+          ")",
           start_at, end_at,
           start_at, end_at,
           start_at, end_at

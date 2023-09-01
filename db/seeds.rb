@@ -77,8 +77,8 @@ def confirm_all_users
   end
 end
 
-#seed_100_providers
-#add_5_reviews_for_each_provider
+seed_100_providers
+add_5_reviews_for_each_provider
 confirm_all_users
 
 
