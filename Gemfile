@@ -58,6 +58,8 @@ gem 'mail'
 gem 'sidekiq'
 gem 'whenever', require: false
 gem 'rgeo-geojson'
+gem 'mailgun-ruby'
+
 
 
 
