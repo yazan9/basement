@@ -4,7 +4,7 @@ class Api::V1::BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    render json: @bookings
+    render json: BookingBlueprint.render_as_hash(@bookings), status: :ok
   end
 
   # GET /bookings/1
@@ -86,17 +86,11 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def set_bookings_for_provider
-    @bookings = Booking.where(provider_id: @api_user.id, status: [:pending, :active]).includes(:provider).map do |booking|
-      booking_json = booking.as_json(include: { user: { only: [:id, :name] } })
-      booking_json["client"] = booking_json.delete("user")
-      booking_json
-    end
+    @bookings = Booking.where(provider_id: @api_user.id, status: [:pending, :active])
   end
 
   def set_bookings_for_client
-    @bookings = Booking.where(user_id: @api_user.id, status: [:pending, :active]).includes(:provider).map do |booking|
-      booking.as_json(include: { provider: { only: [:id, :name] } }) # Include desired provider attributes
-    end
+    @bookings = Booking.where(user_id: @api_user.id, status: [:pending, :active])
   end
 
   # Only allow a list of trusted parameters through.
