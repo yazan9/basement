@@ -6,11 +6,13 @@ class BookingMailerWorker
 
     case action
     when 'new_booking'
-      BookingMailer.with(booking: booking).notify_new_booking.deliver_now
-    when 'booking_update'
-      BookingMailer.with(booking: booking).notify_booking_update.deliver_now
-    when 'booking_cancellation'
-      BookingMailer.with(booking: booking).notify_booking_cancellation.deliver_now
+      Bookings::BookingMailer.notify_new_booking(booking).deliver_now
+    when 'booking_accepted'
+      Bookings::BookingMailer.notify_booking_accepted(booking).deliver_now
+    when 'booking_rejected'
+      Bookings::BookingMailer.notify_booking_rejected(booking).deliver_now
+    when 'booking_canceled'
+      Bookings::BookingMailer.notify_booking_cancelled(booking).deliver_now
     else
       raise "Invalid action provided to BookingMailerWorker"
     end

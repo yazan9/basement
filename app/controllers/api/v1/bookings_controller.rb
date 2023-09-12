@@ -37,8 +37,10 @@ class Api::V1::BookingsController < ApplicationController
   def destroy
     if @api_user.user_type == "client"
       @booking.status = :cancelled_by_client
+      @booking.canceled = true
     else
       @booking.status = :cancelled_by_provider
+      @booking.rejected = true
     end
 
     if @booking.save
@@ -50,6 +52,7 @@ class Api::V1::BookingsController < ApplicationController
 
   def accept
     @booking.status = :active
+    @booking.accepted = true
 
     if @booking.save!
       render json: @booking, status: :ok
@@ -70,11 +73,11 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def set_booking_for_provider
-    @booking = Booking.find_by(id: params[:id], provider_id: @api_user.id)
+    @booking = Booking.includes(:provider).find_by(id: params[:id], provider_id: @api_user.id)
   end
 
   def set_booking_for_client
-    @booking = Booking.find_by(id: params[:id], user_id: @api_user.id)
+    @booking = Booking.includes(:provider).find_by(id: params[:id], user_id: @api_user.id)
   end
 
   def set_bookings

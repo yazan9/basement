@@ -26,8 +26,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
         latitude, longitude = coordinates
         # Using PostGIS's ST_Point method to store lat, long
         resource.location = "POINT(#{longitude} #{latitude})"
-      else
-        render json: { message: 'Invalid address' }, status: :unprocessable_entity and return
+        resource.address_verified = true
       end
     end
 

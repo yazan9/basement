@@ -1,4 +1,8 @@
 class Booking < ApplicationRecord
+  attr_accessor :accepted
+  attr_accessor :rejected
+  attr_accessor :canceled
+
   belongs_to :user
   belongs_to :provider, class_name: 'User', foreign_key: 'provider_id'
 
@@ -11,8 +15,7 @@ class Booking < ApplicationRecord
   after_commit :queue_update_booking_slots
 
   after_commit -> { BookingMailerWorker.perform_async(self.id, 'new_booking') }, on: :create
-  after_commit -> { BookingMailerWorker.perform_async(self.id, 'booking_update') }, on: :update
-  after_commit -> { BookingMailerWorker.perform_async(self.id, 'booking_cancellation') }, on: :destroy
+  after_commit -> { email_parties }, on: :update
 
 
   enum frequency: {
@@ -29,6 +32,16 @@ class Booking < ApplicationRecord
     cancelled_by_client: 3,
     cancelled_by_provider: 4
   }
+
+  def email_parties
+    if self.accepted
+      BookingMailerWorker.perform_async(self.id, 'booking_accepted')
+    elsif self.rejected
+      BookingMailerWorker.perform_async(self.id, 'booking_rejected')
+    elsif self.canceled
+      BookingMailerWorker.perform_async(self.id, 'booking_canceled')
+    end
+  end
 
   def queue_update_booking_slots
     UpdateBookingSlotsWorker.perform_async(self.id)

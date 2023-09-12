@@ -1,0 +1,21 @@
+<p>Good day <%= @booking.user.name %>!</p>
+
+<p>
+  Congratulations, You have a new booking request!
+</p>
+
+<p>
+  <u>Booking details</u><br>
+  <strong>Frequency</strong>: <%= @booking.frequency.humanize %><br>
+  <strong>Start Date</strong>: <%= @booking.start_at %><br>
+  <strong>rate</strong>: $<%= @booking.rate %><br>
+</p>
+
+<p>
+  Please click on the link below to view the booking details, and either accept or reject the booking request.
+</p>
+
+<p>
+  Sincerely,<br/>
+  Helping Pixies Team
+</p>

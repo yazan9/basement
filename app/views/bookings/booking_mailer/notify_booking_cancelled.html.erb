@@ -1,0 +1,17 @@
+<p>Good day <%= @booking.provider.name %>!</p>
+
+<p>
+  We regret to let you know that <%= @booking.user.name %>, has unfortunately cancelled their booking request.
+</p>
+
+<p>
+  <u>Booking details</u><br>
+  <strong>Frequency</strong>: <%= @booking.frequency.humanize %><br>
+  <strong>Start Date</strong>: <%= @booking.start_at %><br>
+  <strong>rate</strong>: $<%= @booking.rate %><br>
+</p>
+
+<p>
+  Sincerely,<br/>
+  Helping Pixies Team
+</p>
