@@ -4,13 +4,12 @@ class Api::V1::MessagesController < ApplicationController
   before_action :set_message, only: [:destroy, :update]
 
   def index
-    render json: @messages, status: :ok
+    render json: MessageBlueprint.render_as_hash(@messages), status: :ok
   end
 
   def create
     @message = @conversation.messages.new(message_params)
     @message.user = @api_user
-
     if @message.save
       render json: @message, status: :created
     else
