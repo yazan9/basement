@@ -2,6 +2,7 @@ class Api::V1::MessagesController < ApplicationController
   before_action :set_conversation
   before_action :set_messages_for_conversation, only: [:index]
   before_action :set_message, only: [:destroy, :update]
+  before_action :set_unread_messages, only: [:read]
 
   def index
     render json: MessageBlueprint.render_as_hash(@messages), status: :ok
@@ -33,6 +34,11 @@ class Api::V1::MessagesController < ApplicationController
     end
   end
 
+  def read
+    @messages.update_all(read: true)
+    render json: { success: true }, status: :ok
+  end
+
   private
 
   def set_conversation
@@ -49,5 +55,9 @@ class Api::V1::MessagesController < ApplicationController
 
   def set_message
     @message = Message.find_by(id: params[:id], conversation_id: params[:conversation_id], user_id: @api_user.id)
+  end
+
+  def set_unread_messages
+    @messages = @conversation.messages.where("user_id != ? AND read = ?", @api_user.id, false)
   end
 end
