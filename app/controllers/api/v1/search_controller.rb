@@ -35,9 +35,9 @@ class Api::V1::SearchController < ApplicationController
         users_scope = users_scope.left_outer_joins(:booking_slots)
 
         # SQL condition to find overlapping bookings
-        condition_overlap = "((booking_slots.start_at >= ? AND booking_slots.start_at < ?) OR " \
-                    "(booking_slots.end_at > ? AND booking_slots.end_at <= ?) OR " \
-                    "(booking_slots.start_at <= ? AND booking_slots.end_at >= ?))"
+        condition_overlap = "((? <= booking_slots.start_at AND ? >= booking_slots.end_at) OR " \
+                    "(? >= booking_slots.start_at AND ? <= booking_slots.end_at) OR " \
+                    "(? >= booking_slots.start_at AND ? <= booking_slots.end_at))"
 
         # Apply the condition and filter
         users_scope = users_scope.where(
@@ -46,8 +46,8 @@ class Api::V1::SearchController < ApplicationController
           "WHERE booking_slots.user_id = users.id AND #{condition_overlap}" \
           ")",
           start_at, end_at,
-          start_at, end_at,
-          start_at, end_at
+          start_at, start_at,
+          end_at, end_at
         ).distinct
       end
 

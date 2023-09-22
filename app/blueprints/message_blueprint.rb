@@ -9,4 +9,5 @@ class MessageBlueprint < Blueprinter::Base
     puts message.user.name
     message.user.name
   end
+  field :is_system_message
 end

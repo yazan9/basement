@@ -13,6 +13,7 @@ class Booking < ApplicationRecord
   validates :status, presence: true
 
   after_commit :queue_update_booking_slots
+  after_commit :update_booking_slots_immediately, on: :update
 
   after_commit -> { BookingMailerWorker.perform_async(self.id, 'new_booking') }, on: :create
   after_commit -> { email_parties }, on: :update
@@ -45,5 +46,34 @@ class Booking < ApplicationRecord
 
   def queue_update_booking_slots
     UpdateBookingSlotsWorker.perform_async(self.id)
+  end
+
+  def update_booking_slots_immediately
+    if self.status == 'active'
+      create_booking_slots
+    else
+      if self.status == 'cancelled_by_client' || self.status == 'cancelled_by_provider'
+        clear_booking_slots
+      end
+    end
+  end
+
+  def create_booking_slots
+    days_from_now = 60
+    occurrences = NextBookingSlotService.new(self, days_from_now).call
+
+    occurrences.each do |occurrence|
+      booking_slot = BookingSlot.new(
+        booking: self,
+        user: self.provider,
+        start_at: occurrence,
+        end_at: occurrence + self.hours.hours
+      )
+      booking_slot.save!
+    end
+  end
+
+  def clear_booking_slots
+    self.booking_slots.destroy_all
   end
 end

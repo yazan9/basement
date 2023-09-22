@@ -7,10 +7,6 @@ class NextBookingSlotService
   def call
     occurrences = []
 
-    if @booking.status != 'active'
-      return occurrences
-    end
-
     case @booking.frequency
     when 'once'
       return @booking.start_at >= DateTime.now.utc ? [@booking.start_at] : []

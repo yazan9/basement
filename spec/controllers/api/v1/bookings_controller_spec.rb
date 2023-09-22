@@ -33,8 +33,9 @@ RSpec.describe Api::V1::BookingsController, type: :controller do
       get :index
       expect(response).to have_http_status(:ok)
       parsed_response = JSON.parse(response.body)
-      expect(Booking.count).to eq(2)
-      expect(parsed_response.count).to eq(1)
+      expect(Booking.count).to eq(6)
+      #user is a client, so only bookings that belong to him should be returned, and not client 2 above
+      expect(parsed_response.count).to eq(5)
     end
   end
 
@@ -107,10 +108,10 @@ RSpec.describe Api::V1::BookingsController, type: :controller do
       expect(BookingSlot.first.start_at).to eq(booking_once.start_at)
       expect(BookingSlot.first.end_at).to eq(booking_once.start_at + booking_once.hours.hours)
       expect(BookingSlot.first.booking_id).to eq(booking_once.id)
-      expect(BookingSlot.first.user_id).to eq(booking_once.user_id)
+      expect(BookingSlot.first.user_id).to eq(booking_once.provider_id)
     end
 
-    it "accepts a booking of type once_a_week and creates four or five slots" do
+    it "accepts a booking of type once_a_week and creates 8 or 9 slots" do
       expect(booking_once_a_week.status).to eq("pending")
       put :accept, params: { id: booking_once_a_week.id }
       expect(response).to have_http_status(:ok)
@@ -118,14 +119,14 @@ RSpec.describe Api::V1::BookingsController, type: :controller do
       expect(parsed_response['status']).to eq("active")
 
       #slots should be created because the booking is active at this point
-      expect(BookingSlot.count).to eq(4).or eq(5)
+      expect(BookingSlot.count).to eq(8).or eq(9)
       expect(BookingSlot.first.start_at).to eq(booking_once_a_week.start_at)
       expect(BookingSlot.first.end_at).to eq(booking_once_a_week.start_at + booking_once_a_week.hours.hours)
       expect(BookingSlot.first.booking_id).to eq(booking_once_a_week.id)
-      expect(BookingSlot.first.user_id).to eq(booking_once_a_week.user_id)
+      expect(BookingSlot.first.user_id).to eq(booking_once_a_week.provider_id)
     end
 
-    it "accepts a booking of type twice_a_week and creates 8 or 9 slots" do
+    it "accepts a booking of type twice_a_week and creates 16 or 17 slots" do
       expect(booking_twice_a_week.status).to eq("pending")
       put :accept, params: { id: booking_twice_a_week.id }
       expect(response).to have_http_status(:ok)
@@ -133,14 +134,14 @@ RSpec.describe Api::V1::BookingsController, type: :controller do
       expect(parsed_response['status']).to eq("active")
 
       #slots should be created because the booking is active at this point
-      expect(BookingSlot.count).to eq(8).or eq(9)
+      expect(BookingSlot.count).to eq(16).or eq(17)
       expect(BookingSlot.first.start_at).to eq(booking_twice_a_week.start_at)
       expect(BookingSlot.first.end_at).to eq(booking_twice_a_week.start_at + booking_twice_a_week.hours.hours)
       expect(BookingSlot.first.booking_id).to eq(booking_twice_a_week.id)
-      expect(BookingSlot.first.user_id).to eq(booking_twice_a_week.user_id)
+      expect(BookingSlot.first.user_id).to eq(booking_twice_a_week.provider_id)
     end
 
-    it "accepts a booking of type once_every_two_weeks and creates 2 or 3 slots" do
+    it "accepts a booking of type once_every_two_weeks and creates 4 or 5 slots" do
       expect(booking_once_every_two_weeks.status).to eq("pending")
       put :accept, params: { id: booking_once_every_two_weeks.id }
       expect(response).to have_http_status(:ok)
@@ -148,11 +149,11 @@ RSpec.describe Api::V1::BookingsController, type: :controller do
       expect(parsed_response['status']).to eq("active")
 
       #slots should be created because the booking is active at this point
-      expect(BookingSlot.count).to eq(2).or eq(3)
+      expect(BookingSlot.count).to eq(4).or eq(5)
       expect(BookingSlot.first.start_at).to eq(booking_once_every_two_weeks.start_at)
       expect(BookingSlot.first.end_at).to eq(booking_once_every_two_weeks.start_at + booking_once_every_two_weeks.hours.hours)
       expect(BookingSlot.first.booking_id).to eq(booking_once_every_two_weeks.id)
-      expect(BookingSlot.first.user_id).to eq(booking_once_every_two_weeks.user_id)
+      expect(BookingSlot.first.user_id).to eq(booking_once_every_two_weeks.provider_id)
     end
   end
 end

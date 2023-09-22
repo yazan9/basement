@@ -10,13 +10,13 @@ class BookingMailerWorker
       MessengerService.new(booking).message_new_booking
     when 'booking_accepted'
       Bookings::BookingMailer.notify_booking_accepted(booking).deliver_now
-      #MessengerService.new(booking).message_booking_accepted
+      MessengerService.new(booking).message_booking_accepted
     when 'booking_rejected'
       Bookings::BookingMailer.notify_booking_rejected(booking).deliver_now
-      #MessengerService.new(booking).message_booking_rejected
+      MessengerService.new(booking).message_booking_rejected
     when 'booking_canceled'
       Bookings::BookingMailer.notify_booking_cancelled(booking).deliver_now
-      #MessengerService.new(booking).message_booking_canceled
+      MessengerService.new(booking).message_booking_canceled
     else
       raise "Invalid action provided to BookingMailerWorker"
     end

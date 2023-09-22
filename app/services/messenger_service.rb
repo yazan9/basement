@@ -7,8 +7,9 @@ class MessengerService
     conversation = Conversation.find_or_create_by(sender_id: @booking.user_id, recipient_id: @booking.provider_id)
 
     conversation.messages.create(
-      content: "Your booking is now active!",
-      user_id: @booking.user_id
+      content: "Your booking is now created!",
+      user_id: @booking.user_id,
+      is_system_message: true
     )
   end
 
@@ -16,18 +17,29 @@ class MessengerService
     conversation = Conversation.find_or_create_by(sender_id: @booking.user_id, recipient_id: @booking.provider_id)
 
     conversation.messages.create(
-      content: "You have a new booking!",
-      user_id: @booking.user_id
+      content: "Your booking is now accepted",
+      user_id: @booking.user_id,
+      is_system_message: true
     )
   end
 
   def message_booking_rejected
-    message = "Your booking has been rejected! "
-    send_message(message)
+    conversation = Conversation.find_or_create_by(sender_id: @booking.user_id, recipient_id: @booking.provider_id)
+
+    conversation.messages.create(
+      content: "Your booking has been rejected :(",
+      user_id: @booking.user_id,
+      is_system_message: true
+    )
   end
 
   def message_booking_canceled
-    message = "Your booking has been canceled! "
-    send_message(message)
+    conversation = Conversation.find_or_create_by(sender_id: @booking.user_id, recipient_id: @booking.provider_id)
+
+    conversation.messages.create(
+      content: "Your booking has been cancelled",
+      user_id: @booking.user_id,
+      is_system_message: true
+    )
   end
 end

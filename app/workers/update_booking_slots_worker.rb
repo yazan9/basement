@@ -11,13 +11,13 @@ class UpdateBookingSlotsWorker
     # Delete existing booking slots for this booking
     booking.booking_slots.destroy_all
 
-    days_from_now = 30
+    days_from_now = 60
     occurrences = NextBookingSlotService.new(booking, days_from_now).call
 
     occurrences.each do |occurrence|
       booking_slot = BookingSlot.new(
         booking: booking,
-        user: booking.user,
+        user: booking.provider,
         start_at: occurrence,
         end_at: occurrence + booking.hours.hours
       )

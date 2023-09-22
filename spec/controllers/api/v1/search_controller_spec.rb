@@ -107,12 +107,12 @@ RSpec.describe Api::V1::SearchController, type: :controller do
       let!(:client) { create(:user, :client, location: 'POINT(2.0 2.0)', email: 'user4@someone.com', name: 'user4') }
 
       let!(:booking) { create(:booking, :once_a_week, user: client, provider_id: user1.id, start_at: "2023-08-31T08:00:00UTC") }
-      let!(:booking_slot1) { create(:booking_slot, booking: booking, user: user1, start_at: "2023-08-31T08:00:00UTC", end_at: "2023-08-31T10:00:00UTC" ) }
-      let!(:booking_slot2) { create(:booking_slot, booking: booking, user: user1, start_at: "2023-09-07T08:00:00UTC", end_at: "2023-09-07T10:00:00UTC" ) }
+      let!(:booking_slot1) { create(:booking_slot, booking: booking, user: user1, start_at: "2023-09-22 07:06:00.000", end_at: "2023-09-22 09:06:00.000" ) }
+      let!(:booking_slot2) { create(:booking_slot, booking: booking, user: user1, start_at: "2023-10-07 07:06:00.000", end_at: "2023-10-07 09:06:00.000" ) }
 
 
       it 'excludes the user with conflicting booking slots: same time' do
-        get :index, params: { latitude: '0.0', longitude: '0.0', radius: '350', hours: 2, start_at: "2023-08-31T08:00:00UTC" }
+        get :index, params: { latitude: '0.0', longitude: '0.0', radius: '500', hours: 2, start_at: "2023-09-22T07:00:00+00:00" }
 
         expect(response).to have_http_status(:ok)
 
