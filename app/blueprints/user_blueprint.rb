@@ -4,7 +4,7 @@ class UserBlueprint < Blueprinter::Base
   identifier :id
 
   view :restricted do
-    fields :email, :name, :profile_image_url, :user_type, :created_at, :updated_at, :phone
+    fields :email, :name, :profile_image_url, :user_type, :created_at, :updated_at, :phone, :description
   end
 
   view :extended do
