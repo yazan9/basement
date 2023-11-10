@@ -57,6 +57,7 @@ class User < ApplicationRecord
     JWT.decode user_token, key_base_token, { exp_leeway: leeway, algorithm: 'HS256' }
   end
 
+  #called by confirmable module
   def send_devise_notification(notification, *args)
     AccountMailerWorker.perform_async(self.id, 'new_account', *args)
   end

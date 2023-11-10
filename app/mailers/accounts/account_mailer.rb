@@ -2,6 +2,8 @@ class Accounts::AccountMailer < ApplicationMailer
   default from: 'accounts@helpingpixies.com'
   def send_email_confirmation(user)
     @user = user
-    mail(to: @user.email, subject: 'Welcome to Helping Pixies! Please confirm your email address by clicking the link below')
+    @encoded_image = Base64.encode64(File.binread(Rails.root.join("public/logo.png"))).gsub("\n", '')
+    @link = "#{ENV.fetch('PIXIES_UI_URL', 'https://helipingpixies.com')}/do-confirm-email?token=#{user.confirmation_token}"
+    mail(to: user.email, subject: 'Welcome to Helping Pixies! Please confirm your email address by clicking the link below')
   end
 end

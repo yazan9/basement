@@ -1,1 +1,40 @@
-body of the email here
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to Helping Pixies</title>
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          color: #333;
+          line-height: 1.6;
+      }
+      .container {
+          max-width: 600px;
+          margin: 20px auto;
+          padding: 20px;
+          background: #fff;
+      }
+      .logo {
+          display: block;
+          margin: 0 auto;
+      }
+  </style>
+</head>
+<body>
+<div class="container">
+  <img src="data:image/png;base64, <%= @encoded_image %>" alt="Helping Pixies Logo" class="logo"/>
+  <h1>Welcome to Helping Pixies!</h1>
+  <p>Good day! <%= @user.name %></p>
+
+  <p>Thank you for signing up to helpingpixies.com!</p>
+
+  <p>We're thrilled to have you on board and are excited to help you discover the awesomeness we have in store. Our community is dedicated to providing support and assistance in ways that truly make a difference.</p>
+
+  <p>Please click <a href="<%= @link %>">here</a> to activate your account and get started on your journey with us.</p>
+
+  <p>Sincerely,<br/>
+    The Helping Pixies Team</p>
+</div>
+</body>
+</html>
