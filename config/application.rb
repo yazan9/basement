@@ -38,6 +38,7 @@ module HelpingPixies
     config.api_only = true
 
     config.time_zone = 'UTC'
+    config.active_record.default_timezone = :utc
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do

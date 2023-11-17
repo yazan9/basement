@@ -6,28 +6,27 @@ class QueueOutgoingMessageWorker
   def perform
     puts "QueueOutgoingMessageWorker: perform"
     # Queue reminders 3 days before start_date
-    # TODO: DO NOT FORGET TO CHANGE THE CONDITION TO 3 DAYS
-    Booking.where(start_date: 3.days.from_now.to_date).each do |booking|
-      message_params = booking_params(booking)
-      queue_message(booking.user.email, :three_day_reminder, message_params)
-      queue_message(booking.provider.email, :three_day_reminder, message_params)
+    BookingSlot.where('start_at < ?', 3.days.from_now).each do |booking_slot|
+      booking = booking_slot.booking
+      queue_message(booking.user.email, :three_day_reminder, booking_params(booking, :user))
+      queue_message(booking.provider.email, :three_day_reminder, booking_params(booking, :provider))
     end
 
     # Queue reminders 1 day before start_date
-    Booking.where(start_date: 1.day.from_now.to_date).each do |booking|
-      message_params = booking_params(booking)
-      queue_message(booking.user.email, :one_day_reminder, message_params)
-      queue_message(booking.provider.email, :one_day_reminder, message_params)
+    BookingSlot.where('start_at < ?', 1.days.from_now).each do |booking_slot|
+      booking = booking_slot.booking
+      queue_message(booking.user.email, :one_day_reminder,  booking_params(booking, :user))
+      queue_message(booking.provider.email, :one_day_reminder,  booking_params(booking, :provider))
     end
   end
 
   private
 
-  def booking_params(booking)
+  def booking_params(booking, user_type = :provider)
     {
       status: 'queued',
       platform: 'email',
-      data: { booking_id: booking.id },
+      data: { booking_id: booking.id, timezone: user_type == :provider ? booking.provider.time_zone : booking.user.time_zone },
       content: 'standard'
     }
   end

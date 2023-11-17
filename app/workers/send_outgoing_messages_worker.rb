@@ -17,9 +17,11 @@ class SendOutgoingMessagesWorker
     message_type = message.message_type.to_sym
     case message_type
     when :three_day_reminder
-      Bookings::BookingMailer.three_day_reminder(Booking.find(message['data']['booking_id'])).deliver!
+      Bookings::BookingMailer.three_day_reminder(
+        message, Booking.find(message['data']['booking_id']), message['data']['timezone']).deliver!
     when :one_day_reminder
-      Bookings::BookingMailer.one_day_reminder(Booking.find(message['data']['booking_id'])).deliver!
+      Bookings::BookingMailer.one_day_reminder(
+        message, Booking.find(message['data']['booking_id']), message['data']['timezone']).deliver!
     else
       ["failed", "Unknown message type: #{message_type}"]
     end

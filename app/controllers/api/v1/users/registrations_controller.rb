@@ -73,7 +73,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
 
   # protected
   def sign_up_params
-    params.require(:user).permit(:email, :password, :name, :phone, :user_type, :latitude, :longitude, :address)
+    params.require(:user).permit(:email, :password, :name, :phone, :user_type, :latitude, :longitude, :address, :time_zone)
   end
 
   # If you have extra params to permit, append them to the sanitizer.

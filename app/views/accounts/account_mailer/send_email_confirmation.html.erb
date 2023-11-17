@@ -23,7 +23,6 @@
 </head>
 <body>
 <div class="container">
-  <img src="data:image/png;base64, <%= @encoded_image %>" alt="Helping Pixies Logo" class="logo"/>
   <h1>Welcome to Helping Pixies!</h1>
   <p>Good day! <%= @user.name %></p>
 
@@ -32,6 +31,8 @@
   <p>We're thrilled to have you on board and are excited to help you discover the awesomeness we have in store. Our community is dedicated to providing support and assistance in ways that truly make a difference.</p>
 
   <p>Please click <a href="<%= @link %>">here</a> to activate your account and get started on your journey with us.</p>
+
+  <p>Alternatively, you can paste the following link in a browser: <%= @link %>"></p>
 
   <p>Sincerely,<br/>
     The Helping Pixies Team</p>

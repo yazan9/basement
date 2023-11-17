@@ -31,6 +31,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :health, only: [:index]
+
       resources :conversations, only: [:index, :create, :destroy] do
         resources :messages, only: [:index, :create, :destroy, :update] do
           collection do
