@@ -59,6 +59,7 @@ gem 'sidekiq'
 gem 'whenever', require: false
 gem 'rgeo-geojson'
 gem 'mailgun-ruby'
+gem 'newrelic_rpm'
 
 
 
