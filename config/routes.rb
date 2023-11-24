@@ -25,10 +25,8 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :bookings, only: [:index, :show, :create, :update, :destroy] do
-        member do
-          put :accept
-        end
+      resources :listings, only: [:index, :show, :create, :update, :destroy] do
+
       end
 
       resources :health, only: [:index]

@@ -7,7 +7,7 @@ default: &default
 
 development:
   <<: *default
-  database: helping_pixies_development2
+  database: basement_development
   host: localhost
   port: 5432
   user: <%= ENV.fetch('DB_USER', 'db') %>
@@ -15,7 +15,7 @@ development:
 
 test:
   <<: *default
-  database: helping_pixies_test2
+  database: basement_test
   host: localhost
   port: 5432
   user: <%= ENV.fetch('DB_USER', 'db') %>

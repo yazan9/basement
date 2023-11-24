@@ -13,11 +13,6 @@ class User < ApplicationRecord
 
   validate :password_complexity
 
-  enum user_type: {
-    client: 0,
-    provider: 1
-  }
-
   def password_complexity
     if password.present? and not password.match(/\A(?=.*[0-9]).{6,}\z/)
       errors.add :password, 'must include at least one number and have at least 6 characters'

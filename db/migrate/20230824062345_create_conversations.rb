@@ -1,13 +1,12 @@
 class CreateConversations < ActiveRecord::Migration[6.1]
   def change
     create_table :conversations do |t|
-      t.integer :sender_id
-      t.integer :recipient_id
+      t.references :sender, null: false, foreign_key: { to_table: :users }
+      t.references :recipient, null: false, foreign_key: { to_table: :users }
       t.boolean :archived, default: false
 
       t.timestamps
     end
-    add_index :conversations, :sender_id
-    add_index :conversations, :recipient_id
+    # Indexes are automatically created for foreign key references
   end
 end

@@ -44,43 +44,27 @@ ActiveRecord::Schema.define(version: 2023_11_14_222320) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "booking_slots", force: :cascade do |t|
-    t.bigint "booking_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "start_at"
-    t.datetime "end_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["booking_id"], name: "index_booking_slots_on_booking_id"
-    t.index ["end_at"], name: "index_booking_slots_on_end_at"
-    t.index ["start_at"], name: "index_booking_slots_on_start_at"
-    t.index ["user_id"], name: "index_booking_slots_on_user_id"
-  end
-
-  create_table "bookings", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "provider_id", null: false
-    t.integer "frequency", default: 0, null: false
-    t.integer "status", default: 0, null: false
-    t.datetime "start_at", null: false
-    t.decimal "rate", precision: 5, scale: 2, default: "0.0", null: false
-    t.text "comments"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.integer "offset", default: 0
-    t.integer "hours", default: 0
-    t.index ["provider_id"], name: "index_bookings_on_provider_id"
-    t.index ["user_id"], name: "index_bookings_on_user_id"
-  end
-
   create_table "conversations", force: :cascade do |t|
-    t.integer "sender_id"
-    t.integer "recipient_id"
+    t.bigint "sender_id", null: false
+    t.bigint "recipient_id", null: false
     t.boolean "archived", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["recipient_id"], name: "index_conversations_on_recipient_id"
     t.index ["sender_id"], name: "index_conversations_on_sender_id"
+  end
+
+  create_table "listings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "status", default: 0, null: false
+    t.decimal "rate", precision: 5, scale: 2, default: "0.0", null: false
+    t.text "title"
+    t.text "description"
+    t.text "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.geography "location", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.index ["user_id"], name: "index_listings_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -93,17 +77,6 @@ ActiveRecord::Schema.define(version: 2023_11_14_222320) do
     t.boolean "is_system_message", default: false
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
-  end
-
-  create_table "orders", force: :cascade do |t|
-    t.bigint "user_id"
-    t.integer "hours"
-    t.integer "frequency"
-    t.decimal "price"
-    t.integer "status"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "outgoing_messages", force: :cascade do |t|
@@ -127,17 +100,6 @@ ActiveRecord::Schema.define(version: 2023_11_14_222320) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["reviewee_id"], name: "index_reviews_on_reviewee_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
-  end
-
-  create_table "schedules", force: :cascade do |t|
-    t.bigint "order_id"
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.integer "status"
-    t.text "notes"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["order_id"], name: "index_schedules_on_order_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -168,14 +130,11 @@ ActiveRecord::Schema.define(version: 2023_11_14_222320) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "booking_slots", "bookings"
-  add_foreign_key "booking_slots", "users"
-  add_foreign_key "bookings", "users"
-  add_foreign_key "bookings", "users", column: "provider_id"
+  add_foreign_key "conversations", "users", column: "recipient_id"
+  add_foreign_key "conversations", "users", column: "sender_id"
+  add_foreign_key "listings", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"
-  add_foreign_key "orders", "users"
   add_foreign_key "reviews", "users"
   add_foreign_key "reviews", "users", column: "reviewee_id"
-  add_foreign_key "schedules", "orders"
 end
